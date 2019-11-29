@@ -32,7 +32,7 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
 
     @GetMapping("/gitlogin")
-    public  String backindex(@RequestParam(name ="code") String code, @RequestParam(name = "state") String state, HttpServletRequest request, HttpServletResponse response){
+    public  String backindex(@RequestParam(name ="code") String code, @RequestParam(name = "state") String state, HttpServletResponse response){
         AcessTokenDTO acessTokenDTO = new AcessTokenDTO();
         acessTokenDTO.setCode(code);
         acessTokenDTO.setState(state);
@@ -47,10 +47,11 @@ public class AuthorizeController {
            String token =UUID.randomUUID().toString();
            users.setToken(token);
            users.setName(user.getName());
-           users.setAccountId(String.valueOf(user.getId()));//将int类型强转为String
+           users.setAccount_Id(String.valueOf(user.getId()));//将int类型强转为String
            users.setAvatarUrl(user.getAvatar_url());
            users.setGmtCreate(System.currentTimeMillis());
            users.setGmtModified(users.getGmtCreate());
+           users.setBio(user.getBio());
            userMapper.insert(users);
             response.addCookie(new Cookie("token",token));//添加Cookie
             return "redirect:/";//重定向页面

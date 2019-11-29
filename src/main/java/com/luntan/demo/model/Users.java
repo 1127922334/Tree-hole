@@ -3,11 +3,12 @@ package com.luntan.demo.model;
 public class Users {
     private  Integer id;
     private String name;
-    private String accountId;
+    private String Account_Id;
     private  String  token;
-    private String avatarUrl;
-    private Long gmtCreate;
-    private Long gmtModified;
+    private String AvatarUrl;
+    private Long GmtCreate;
+    private Long GmtModified;
+    private  String bio ;
 
     public Integer getId() {
         return id;
@@ -25,12 +26,12 @@ public class Users {
         this.name = name;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public String getAccount_Id() {
+        return Account_Id;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setAccount_Id(String Account_Id) {
+        this.Account_Id = Account_Id;
     }
 
     public String getToken() {
@@ -42,26 +43,34 @@ public class Users {
     }
 
     public String getAvatarUrl() {
-        return avatarUrl;
+        return AvatarUrl;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatarUrl(String AvatarUrl) {
+        this.AvatarUrl = AvatarUrl;
     }
 
     public Long getGmtCreate() {
-        return gmtCreate;
+        return GmtCreate;
     }
 
-    public void setGmtCreate(Long gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setGmtCreate(Long GmtCreate) {
+        this.GmtCreate = GmtCreate;
     }
 
     public Long getGmtModified() {
-        return gmtModified;
+        return GmtModified;
     }
 
-    public void setGmtModified(Long gmtModified) {
-        this.gmtModified = gmtModified;
+    public void setGmtModified(Long GmtModified) {
+        this.GmtModified = GmtModified;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }

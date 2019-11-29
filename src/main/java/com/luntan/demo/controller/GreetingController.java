@@ -18,12 +18,13 @@ public class GreetingController {
    @GetMapping("/")
     public  String index(HttpServletRequest request){
        Cookie[] cookies = request.getCookies();
+       if(cookies == null)  return "index";
         for(Cookie cookie:cookies){
                 if(cookie.getName().equals("token")){
                     String token = cookie.getValue();
-                    Users user = userMapper.findByToken(token);
-                    if(user != null){
-                        request.getSession().setAttribute("user",user);
+                    Users user1 = userMapper.findByToken(token);
+                    if(user1 != null){
+                        request.getSession().setAttribute("user",user1);
                     }
                     break;
                 }

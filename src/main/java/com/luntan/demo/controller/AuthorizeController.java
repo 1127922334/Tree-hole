@@ -43,17 +43,24 @@ public class AuthorizeController {
         GithubUser user =  githubProvider.getUser(AcessToken);//获取User数据
         if(user!=null){
             //登录成功
-           Users users  = new Users();
-           String token =UUID.randomUUID().toString();
-           users.setToken(token);
-           users.setName(user.getName());
-           users.setAccount_Id(String.valueOf(user.getId()));//将int类型强转为String
-           users.setAvatarUrl(user.getAvatar_url());
-           users.setGmtCreate(System.currentTimeMillis());
-           users.setGmtModified(users.getGmtCreate());
-           users.setBio(user.getBio());
-           userMapper.insert(users);
-            response.addCookie(new Cookie("token",token));//添加Cookie
+           Users users1 = userMapper.findByAccount_id(String.valueOf(user.getId()));
+            if(users1==null){
+                Users users  = new Users();
+                String token =UUID.randomUUID().toString();
+                users.setToken(token);
+                users.setName(user.getName());
+                users.setAccount_Id(String.valueOf(user.getId()));//将int类型强转为String
+                users.setAvatarUrl(user.getAvatar_url());
+                users.setGmtCreate(System.currentTimeMillis());
+                users.setGmtModified(users.getGmtCreate());
+                users.setBio(user.getBio());
+                userMapper.insert(users);
+                response.addCookie(new Cookie("token",token));//添加Cookie
+            }else {
+                response.addCookie(new Cookie("token",users1.getToken()));
+
+            }
+
             return "redirect:/";//重定向页面
         }else {
             //登录失败

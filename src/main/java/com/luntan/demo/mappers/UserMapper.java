@@ -15,6 +15,7 @@ public interface UserMapper {
 
     @Select("select * from users where token = #{token}")//如果不是类需要添加注解@Param
    Users findByToken(@Param("token") String token);
+
     @Select("select * from users where account_id=#{account_id}")
     Users findByAccount_id(@Param("account_id") String account_id);
 }

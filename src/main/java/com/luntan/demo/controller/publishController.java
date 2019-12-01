@@ -68,11 +68,11 @@ public class publishController {
             }
             //发布成功添加至数据库
         question.setTag(tag);
-        question.setDesciription(description);
+        question.setDescription(description);
         question.setTitle(title);
         question.setCreator(user1.getId());
-        question.setgmt_create(System.currentTimeMillis());
-        question.setgmt_modified(question.getgmt_create());
+        question.setGmt_create(System.currentTimeMillis());
+        question.setGmt_modified(question.getGmt_create());
         questionMapper.Create(question);
         return "redirect:/";
     }

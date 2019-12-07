@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 @Repository
 @Mapper
@@ -18,4 +19,6 @@ public interface UserMapper {
 
     @Select("select * from users where account_id=#{account_id}")
     Users findByAccount_id(@Param("account_id") String account_id);
+    @Select("select * from users where id = #{id}")
+    Users findById(@Param("id") Integer id);
 }

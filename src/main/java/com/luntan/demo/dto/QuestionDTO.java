@@ -1,9 +1,10 @@
-package com.luntan.demo.model;
+package com.luntan.demo.dto;
 
+import com.luntan.demo.model.Users;
 import lombok.Data;
 
 @Data
-public class Question {
+public class QuestionDTO {
     private  Integer id;
     private String title;
     private  String description;
@@ -14,6 +15,6 @@ public class Question {
     private  Integer viewCount;
     private  Integer likeCount;
     private  Integer commentCount;
-
+    private Users user;
 
 }

@@ -25,7 +25,7 @@ public class publishController {
 
     @GetMapping("/publish")
     public  String publish(){
-        return "publish";
+        return "publish1";
     }
 
     @PostMapping("/publish")//从服务端传递数据到前端需要引入Model,将需要传递的数据写入Model
@@ -36,21 +36,21 @@ public class publishController {
         //判断
         if(title == null||title==""){
             model.addAttribute("error","标题不能为空");
-            return "publish";
+            return "publish1";
         }
         if(description==null||description==""){
             model.addAttribute("error","补充不能为空");
-            return "publish";
+            return "publish1";
         }
         if(tag==null||tag==""){
             model.addAttribute("error","标签不能为空");
-            return "publish";
+            return "publish1";
         }
         Question question = new Question();
         Cookie[] cookies = request.getCookies();
         Users user1=null;
         //校验是否登录
-        if(cookies == null)  return "publish";
+        if(cookies == null)  return "publish1";
         for(Cookie cookie:cookies){
             if(cookie.getName().equals("token")){
                 String token = cookie.getValue();
@@ -64,7 +64,7 @@ public class publishController {
         //添加错误信息
             if(user1==null){
                 model.addAttribute("error","用户未登录");
-                return "publish";
+                return "publish1";
             }
             //发布成功添加至数据库
         question.setTag(tag);

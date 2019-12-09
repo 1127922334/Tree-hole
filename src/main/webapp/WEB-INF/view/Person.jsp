@@ -16,7 +16,7 @@
     <script src="/js/jquery-3.4.1.js" type="application/javascript"></script>
     <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="css/community.css">
+    <link rel="stylesheet" href="/css/community.css">
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -66,20 +66,85 @@
         </div>
     </div>
 </nav>
-<div class="container-fluid main"><!--遍历的书写方式-->
+<div class="container-fluid main person" >
     <div class="row" style="margin:19px">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
             <h2> <c:out value="${sectionName}"/></h2>
             <hr/>
+            <c:if test="${section.equals('questions')}">
+                <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
+                <c:forEach items="${mypage.questionDTOS}"  var="question">
+                    <jsp:setProperty name="dateValue" property="time" value="${question.gmtcreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
+                    <div class="media"  style="margin: 50px">
+                        <div class="media-left " >
+                            <a href="#">
+                                <img class="media-object img-rounded" src="${question.user.avatarUrl}" title="${question.user.name}">
+                            </a>
+                        </div>
+                        <div class="media-body"  >
+                            <h4 class="media-heading"> <c:out value="${question.title}"/></h4>
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                            <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复 <span>
+                <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </span>
+                        </div>
+                    </div>
+                </c:forEach>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-lg">
+                        <c:if test="${mypage.firstPage}">
+                            <li >
+                                <a href="?page=1" aria-label="Previous">
+                                    <span aria-hidden="true">&lt;&lt;</span>
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:if test="${mypage.previous}">
+                            <li >
+                                <a href="?page=${mypage.now_page-1}" aria-label="Previous">
+                                    <span aria-hidden="true">&lt;</span>
+                                </a>
+                            </li>
+                        </c:if>
+                        <c:forEach items="${mypage.page_number}" var="page">
+                            <c:if test="${mypage.now_page==page}">
+                                <li class="active">
+                                    <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
+                            </c:if>
+
+                            <c:if test="${mypage.now_page!=page}">
+                                <li >
+                                    <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
+                            </c:if>
+                        </c:forEach>
+                        <c:if test="${mypage.showNext}">
+                            <li>
+                                <a href="?page=${mypage.now_page+1}" aria-label="Next">
+                                    <span aria-hidden="true">&gt;</span>
+                                </a>
+                            </li>
+                        </c:if>
+
+                        <c:if test="${mypage.showEndPage}">
+                            <li >
+                                <a href="?page=${mypage.total_Page}" aria-label="Next">
+                                    <span aria-hidden="true">&gt;&gt;</span>
+                                </a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </nav>
+            </c:if>
+
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <div class="list-group">
+            <div class="list-group section">
                 <c:if test="${section =='questions'}">
                     <a href="/profile/Myquestions" class="list-group-item active">我的问题</a>
                 </c:if>
                 <c:if test="${section !='questions'}">
                     <a href="/profile/Myquestions" class="list-group-item ">我的问题</a>
                 </c:if>
+
                 <c:if test="${section=='repies'}">
                     <a href="/profile/repies"  class="active list-group-item">
                         最新回复
@@ -92,12 +157,9 @@
                         <span class="badge">14</span>
                     </a>
                 </c:if>
-
-
+                 </div>
             </div>
-        </div>
-        <h3></h3>
     </div>
-</div>
+    </div>
 </body>
 </html>

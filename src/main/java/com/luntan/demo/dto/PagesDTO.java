@@ -15,18 +15,19 @@ public class PagesDTO {
     private  Integer now_page;
     private  List<Integer> page_number =new ArrayList<>();
     private  Integer total_Page=0;//展示的页数
+public void  set_total_page(Integer count,Integer size){
 
-    public void set_total_Page(Integer count, Integer size){
-        if(count%size==0){
-            total_Page = count/size;
-        }else{
-            total_Page = count/size+1;
-        }
+    if(count%size==0){
+        total_Page = count/size;
+    }else{
+        total_Page = count/size+1;
     }
-    public void set_page_dto(Integer count, Integer page) {
+}
+    public void set_page_dto( Integer page) {
 
             now_page=page;
-            page_number.add(page);
+            if (page <=total_Page && page >0) page_number.add(page);
+
             //添加页码
                 for (int i=1;i<=3;i++){
                     if(page-i>0){
@@ -62,4 +63,5 @@ public class PagesDTO {
                 showEndPage = true;
             }
     }
+
 }

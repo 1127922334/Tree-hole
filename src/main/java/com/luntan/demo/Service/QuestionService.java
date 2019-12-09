@@ -23,14 +23,44 @@ public class QuestionService {
     public PagesDTO list(Integer page, Integer size) {
         Integer count = questionMapper.CountNumber();
         PagesDTO pagesDTOS = new PagesDTO();
-        pagesDTOS.set_total_Page(count,size);
+        pagesDTOS.set_total_page(count,size);
         //防止输入的页数超出范围
         if (page<1) page=1;
         if (page>pagesDTOS.getTotal_Page()) page=pagesDTOS.getTotal_Page();
-        pagesDTOS.set_page_dto(count,page);
+        pagesDTOS.set_page_dto(page);
         //计算起始点
         Integer pages= size*(page-1);
         List<Question> questionList = questionMapper.list(pages,size);
+        //创建questionDTO数据列表
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        //给questionDTO赋值
+        for(Question question :questionList){
+            Users users = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question,questionDTO);//复制属性
+            questionDTO.setUser(users);
+            questionDTOList.add(questionDTO);
+        }
+
+        pagesDTOS.setQuestionDTOS(questionDTOList);
+        return  pagesDTOS;
+    }
+
+    public PagesDTO list(Integer userId, Integer page, Integer size) {
+        //获取数量
+        Integer count = questionMapper.CountNumber();
+
+        PagesDTO pagesDTOS = new PagesDTO();
+        pagesDTOS.set_total_page(count,size);
+       //获取页数
+
+        //防止输入的页数超出范围
+        if (page<1) page=1;
+        if (page>pagesDTOS.getTotal_Page()) page=pagesDTOS.getTotal_Page();
+        pagesDTOS.set_page_dto(page);
+        //计算起始点
+        Integer pages= size*(page-1);
+        List<Question> questionList = questionMapper.listByUserId(userId,pages,size);
         //创建questionDTO数据列表
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //给questionDTO赋值

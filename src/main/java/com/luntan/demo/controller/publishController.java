@@ -48,19 +48,7 @@ public class publishController {
         }
         Question question = new Question();
         Cookie[] cookies = request.getCookies();
-        Users user1=null;
-        //校验是否登录
-        if(cookies == null)  return "publish1";
-        for(Cookie cookie:cookies){
-            if(cookie.getName().equals("token")){
-                String token = cookie.getValue();
-                user1 = userMapper.findByToken(token);
-                if(user1 != null){
-                    request.getSession().setAttribute("user",user1);
-                }
-                break;
-            }
-        }
+        Users user1= (Users) request.getSession().getAttribute("user");
         //添加错误信息
             if(user1==null){
                 model.addAttribute("error","用户未登录");

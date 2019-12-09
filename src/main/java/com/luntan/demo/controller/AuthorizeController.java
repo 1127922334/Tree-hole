@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Response;
 import java.util.UUID;
 
 @Controller
@@ -32,7 +33,7 @@ public class AuthorizeController {
     private GithubProvider githubProvider;
 
     @GetMapping("/gitlogin")
-    public  String backindex(@RequestParam(name ="code") String code, @RequestParam(name = "state") String state, HttpServletResponse response){
+    public  String backindex(@RequestParam(name ="code") String code, @RequestParam(name = "state") String state,HttpServletRequest request, HttpServletResponse response){
         AcessTokenDTO acessTokenDTO = new AcessTokenDTO();
         acessTokenDTO.setCode(code);
         acessTokenDTO.setState(state);
@@ -55,9 +56,18 @@ public class AuthorizeController {
                 users.setGmtModified(users.getGmtCreate());
                 users.setBio(user.getBio());
                 userMapper.insert(users);
-                response.addCookie(new Cookie("token",token));//添加Cookie
+                Cookie cookie =new Cookie("token",token);
+                cookie.setPath("/");
+                int time = 60*60*24;//给Cookie设置过期时间,防止浏览器关闭Cookie被删除
+                cookie.setMaxAge(time);
+                response.addCookie(cookie);//添加Cookie
+
             }else {
-                response.addCookie(new Cookie("token",users1.getToken()));
+                Cookie cookie =new Cookie("token",users1.getToken());
+                cookie.setPath("/");
+                int time = 60*60*24;
+                cookie.setMaxAge(time);
+                response.addCookie(cookie);
 
             }
 

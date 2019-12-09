@@ -18,4 +18,6 @@ public interface QuestionMapper {
     List<Question> list(@Param(value = "pages")Integer pages,@Param(value = "size")Integer size);
     @Select("select count(1) from question")
     Integer CountNumber();
+    @Select("select * from question where creator=#{userId} limit #{pages},#{size}")
+    List<Question> listByUserId(@Param("userId")Integer userId, @Param(value = "pages")Integer pages,@Param(value = "size")Integer size);
 }

@@ -1,5 +1,6 @@
 package com.luntan.demo.controller;
 
+import com.luntan.demo.Service.QuestionService;
 import com.luntan.demo.mappers.QuestionMapper;
 import com.luntan.demo.mappers.UserMapper;
 import com.luntan.demo.model.Question;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,7 +23,19 @@ public class publishController {
     QuestionMapper questionMapper;
 
     @Autowired
+    QuestionService questionService;
+
+    @Autowired
     UserMapper userMapper;
+    @GetMapping("/publish/{id}")
+    public  String edit(@PathVariable(name = "id") Integer id,Model model){
+       Question question =  questionMapper.getById(id);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",question.getId());
+        return "publish1";
+    }
 
     @GetMapping("/publish")
     public  String publish(){
@@ -29,7 +43,10 @@ public class publishController {
     }
 
     @PostMapping("/publish")//从服务端传递数据到前端需要引入Model,将需要传递的数据写入Model
-    public  String dopublish(@RequestParam("title")String title, @RequestParam("description")String description, @RequestParam("tag") String tag, HttpServletRequest request, Model model){
+    public  String dopublish(@RequestParam("title")String title,
+                             @RequestParam("description")String description,
+                             @RequestParam("tag") String tag,
+            @RequestParam("id") Integer id, HttpServletRequest request, Model model){
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
@@ -46,8 +63,8 @@ public class publishController {
             model.addAttribute("error","标签不能为空");
             return "publish1";
         }
+
         Question question = new Question();
-        Cookie[] cookies = request.getCookies();
         Users user1= (Users) request.getSession().getAttribute("user");
         //添加错误信息
             if(user1==null){
@@ -59,9 +76,10 @@ public class publishController {
         question.setDescription(description);
         question.setTitle(title);
         question.setCreator(user1.getId());
+        question.setId(id);
         question.setGmtcreate(System.currentTimeMillis());
         question.setGmtmodified(question.getGmtcreate());
-        questionMapper.Create(question);
+        questionService.CreateUpdate(question);
         return "redirect:/";
     }
 }

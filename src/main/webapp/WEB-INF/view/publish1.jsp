@@ -12,12 +12,12 @@
 <head>
     <title>发布 - 树洞</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.css">
-    <script src="js/jquery-3.4.1.js" type="application/javascript"></script>
-    <script src="js/jquery-3.4.1.min.js" type="application/javascript"></script>
-    <script src="js/bootstrap.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="css/community.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.css">
+    <script src="/js/jquery-3.4.1.js" type="application/javascript"></script>
+    <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/community.css">
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -55,7 +55,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
-                            <li><a href="/profile/repies">退出登录</a></li>
+                            <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
                 </c:if>
@@ -73,6 +73,7 @@
             <h2> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 发布</h2>
             <hr/>
             <form action="/publish" method="post"><!--通过设置访问的请求方法达到不同的效果-->
+                <input  type="hidden" name="id" value="${id}"/>
                 <div class="form-group">
                     <label for="title">标题</label>
                     <br><br>

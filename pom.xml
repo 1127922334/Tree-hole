@@ -17,17 +17,17 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
-    <resources>
-                    <resource>
-                        <!-- 指定处理哪个目录下的资源文件 -->
-                        <directory>src/main/webapp</directory>
-                        <!--注意此次必须要放在此目录下才能被访问到-->
-                        <targetPath>META-INF/resources</targetPath>
-                        <includes>
-                            <include>**/**</include>
-                        </includes>
-                    </resource>
-    </resources>
+<!--    <resources>-->
+<!--                    <resource>-->
+<!--                        &lt;!&ndash; 指定处理哪个目录下的资源文件 &ndash;&gt;-->
+<!--                        <directory>src/main/webapp</directory>-->
+<!--                        &lt;!&ndash;注意此次必须要放在此目录下才能被访问到&ndash;&gt;-->
+<!--                        <targetPath>META-INF/resources</targetPath>-->
+<!--                        <includes>-->
+<!--                            <include>**/**</include>-->
+<!--                        </includes>-->
+<!--                    </resource>-->
+<!--    </resources>-->
 
     <dependencies>
         <dependency>
@@ -69,14 +69,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
-        </dependency>
-
-        <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.18</version>
         </dependency>
 
         <dependency>
@@ -119,13 +114,6 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
-
-        </plugins>
-    </build>
-
-    <!-- 添加flyway插件,配置数据库链接,账户名与密码-->
-    <build>
-        <plugins>
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -136,6 +124,20 @@
                     <password>h5110755</password>
                 </configuration>
             </plugin>
+            <!-- 添加flyway插件,配置数据库链接,账户名与密码-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.18</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
     </build>
 

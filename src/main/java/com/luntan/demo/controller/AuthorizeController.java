@@ -63,7 +63,17 @@ public class AuthorizeController {
                 response.addCookie(cookie);//添加Cookie
 
             }else {
-                Cookie cookie =new Cookie("token",users1.getToken());
+                Users user_s =new Users();
+                String token =UUID.randomUUID().toString();
+                user_s.setToken(token);
+                user_s.setName(user.getName());
+                user_s.setAccount_Id(String.valueOf(user.getId()));//将int类型强转为String
+                user_s.setAvatarUrl(user.getAvatar_url());
+                user_s.setGmtCreate(System.currentTimeMillis());
+                user_s.setGmtModified(users1.getGmtCreate());
+                user_s.setBio(user.getBio());
+                userMapper.update_s(user_s);
+                Cookie cookie =new Cookie("token",user_s.getToken());
                 cookie.setPath("/");
                 int time = 60*60*24;
                 cookie.setMaxAge(time);
@@ -77,6 +87,13 @@ public class AuthorizeController {
             return "redirect:/";//重定向页面
         }
     }
-
+    @GetMapping("/logout")
+    public String    logout(HttpServletRequest request,HttpServletResponse response ){
+            request.getSession().removeAttribute("user");
+            Cookie cookie = new Cookie("token",null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        return "redirect:/";
+    }
 
 }

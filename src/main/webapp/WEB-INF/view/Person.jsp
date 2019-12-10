@@ -1,16 +1,14 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ page import="com.luntan.demo.model.Users" %>
+<%
+    String path = request.getContextPath();
+    String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: yue
-  Date: 2019/12/8
-  Time: 下午7:12
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <html>
 <head>
-    <title>我的问题</title>
+    <title><c:out value="${sectionName}"/></title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.css">
     <script src="/js/jquery-3.4.1.js" type="application/javascript"></script>
@@ -50,11 +48,11 @@
                 <c:if test="${user !=null}">
                     <li role="presentation" class="dropdown" >
                         <a href="#"  class=" dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <img style="wid 30px;height: 30px;border-radius:5px 5px 5px 5px" src=<%= user.getAvatarUrl()%> alt=<%=user.getName()%>/>
+                            <img style="width: 30px;height: 30px;border-radius:5px 5px 5px 5px" src=<%= user.getAvatarUrl()%> alt=<%=user.getName()%>/>
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
-                            <li><a href="/profile/repies">退出登录</a></li>
+                            <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
                 </c:if>
@@ -73,19 +71,20 @@
             <hr/>
             <c:if test="${section.equals('questions')}">
                 <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
-                <c:forEach items="${mypage.questionDTOS}"  var="question">
-                    <jsp:setProperty name="dateValue" property="time" value="${question.gmtcreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
+                <c:forEach items="${mypage.questionDTOS}"  var="myquestion">
+                    <jsp:setProperty name="dateValue" property="time" value="${myquestion.gmtcreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
                     <div class="media"  style="margin: 50px">
                         <div class="media-left " >
                             <a href="#">
-                                <img class="media-object img-rounded" src="${question.user.avatarUrl}" title="${question.user.name}">
+                                <img class="media-object img-rounded" src="${myquestion.user.avatarUrl}" title="${question.user.name}">
                             </a>
                         </div>
                         <div class="media-body"  >
-                            <h4 class="media-heading"> <c:out value="${question.title}"/></h4>
+                            <h4 class="media-heading"> <c:out value="${myquestion.title}"/></h4>
+                            <span><c:out value="${myquestion.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
-                            <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复 <span>
-                <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </span>
+                            <span class="test"><span ><c:out value="${myquestion.commentCount}"/></span>个回复
+                                <span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </span>
                         </div>
                     </div>
                 </c:forEach>

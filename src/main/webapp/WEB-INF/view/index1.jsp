@@ -7,7 +7,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>树洞</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -48,16 +47,17 @@
                         Users user = (Users) request.getSession().getAttribute("user");
                        %>
 
-                    <c:if test="${user !=null}">
+                    <c:if test="${sessionScope.user != null}">
                     <li role="presentation" class="dropdown" >
                         <a href="#"  class=" dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <img style="wid 30px;height: 30px;border-radius:5px 5px 5px 5px" src=<%= user.getAvatarUrl()%> alt=<%=user.getName()%>/>
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
-                            <li><a href="/profile/repies">退出登录</a></li>
+                            <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
+
                     </c:if>
 
                     <c:if test="${sessionScope.user == null}">
@@ -82,9 +82,10 @@
                         </a>
                     </div>
                     <div class="media-body"  >
-                        <h4 class="media-heading"> <c:out value="${question.title}"/></h4>
+                        <h4 class="media-heading">
+                            <a href="/question/${question.id}"><c:out value="${question.title}"/></a></h4>
                         <span><c:out value="${question.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
-                        <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复 <span>
+                        <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复<span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${question.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span> 发布时间<span>
                 <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </span>
                     </div>
                 </div>

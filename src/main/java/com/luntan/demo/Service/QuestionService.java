@@ -45,7 +45,7 @@ public class QuestionService {
         pagesDTOS.setQuestionDTOS(questionDTOList);
         return  pagesDTOS;
     }
-
+//分页
     public PagesDTO list(Integer userId, Integer page, Integer size) {
         //获取数量
         Integer count = questionMapper.CountNumber();
@@ -53,7 +53,6 @@ public class QuestionService {
         PagesDTO pagesDTOS = new PagesDTO();
         pagesDTOS.set_total_page(count,size);
        //获取页数
-
         //防止输入的页数超出范围
         if (page<1) page=1;
         if (page>pagesDTOS.getTotal_Page()) page=pagesDTOS.getTotal_Page();
@@ -71,8 +70,24 @@ public class QuestionService {
             questionDTO.setUser(users);
             questionDTOList.add(questionDTO);
         }
-
         pagesDTOS.setQuestionDTOS(questionDTOList);
         return  pagesDTOS;
+    }
+
+    public QuestionDTO getById(Integer id) {
+       Question question = questionMapper.getById(id);
+       QuestionDTO  questionDTO=new QuestionDTO();
+       BeanUtils.copyProperties(question,questionDTO);
+       Users users = userMapper.findById(question.getCreator());
+       questionDTO.setUser(users);
+       return  questionDTO;
+    }
+
+    public void CreateUpdate(Question question) {
+        if (question.getId()==null){
+            questionMapper.Create(question);
+        }else {
+            questionMapper.update_s(question);
+        }
     }
 }

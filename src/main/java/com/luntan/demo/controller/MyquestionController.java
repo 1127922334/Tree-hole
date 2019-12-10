@@ -5,7 +5,6 @@ import com.luntan.demo.dto.PagesDTO;
 import com.luntan.demo.mappers.QuestionMapper;
 import com.luntan.demo.mappers.UserMapper;
 import com.luntan.demo.model.Users;
-import org.h2.engine.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 

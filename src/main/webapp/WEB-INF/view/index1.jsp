@@ -74,7 +74,7 @@
                 <hr/>
                 <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
                 <c:forEach items="${questions.questionDTOS}"  var="question">
-                    <jsp:setProperty name="dateValue" property="time" value="${question.gmtcreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
+                    <jsp:setProperty name="dateValue" property="time" value="${question.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
                 <div class="media"  style="margin: 50px">
                     <div class="media-left " >
                         <a href="#">
@@ -86,7 +86,7 @@
                             <a href="/question/${question.id}"><c:out value="${question.title}"/></a></h4>
                         <span><c:out value="${question.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
                         <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复<span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${question.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span> 发布时间<span>
-                <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </span>
+                <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd "/></span> </span>
                     </div>
                 </div>
                 </c:forEach>

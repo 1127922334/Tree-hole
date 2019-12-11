@@ -68,14 +68,15 @@
 <div class="container-fluid main person" >
     <div class="row" style="margin:19px">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
-            <jsp:useBean id="dateValue1" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
-            <jsp:setProperty name="dateValue1" property="time" value="${question.gmtcreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
+            <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
+            <jsp:setProperty name="dateValue" property="time" value="${question.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
             <h2> <c:out value="${question.title}"/></h2>
             <span class="test">
                 <span>作者:<c:out value="${question.user.name}"/></span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span >回复:<c:out value="${question.commentCount}"/></span>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${question.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;
-                </span> 发布时间&nbsp;&nbsp;&nbsp;&nbsp;<span><fmt:formatDate value="${dateValue1}" pattern="yyyy-MM-dd"/></span> </span>
+                </span> 发布时间&nbsp;&nbsp;&nbsp;&nbsp;<span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></span>
+            </span>
             <hr/>
             <div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
                 <c:out value="${question.description}"/>

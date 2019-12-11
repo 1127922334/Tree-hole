@@ -31,10 +31,8 @@ public class publishController {
     UserMapper userMapper;
     @GetMapping("/publish/{id}")
     public  String edit(@PathVariable(name = "id") Integer id,Model model){
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria().andIdEqualTo(id);
-        List<Question> questions =  questionMapper.selectByExample(questionExample);
-        Question question = questions.get(0);
+
+        Question question =  questionMapper.selectByPrimaryKey(id);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
@@ -80,8 +78,8 @@ public class publishController {
         question.setTag(tag);
         question.setDescription(description);
         question.setTitle(title);
-        question.setCreator(user1.getId());
         question.setId(id);
+        System.out.println(id);
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         questionService.CreateUpdate(question);

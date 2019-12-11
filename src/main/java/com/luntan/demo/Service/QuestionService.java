@@ -7,6 +7,7 @@ import com.luntan.demo.mappers.UsersMapper;
 import com.luntan.demo.model.Question;
 import com.luntan.demo.model.QuestionExample;
 import com.luntan.demo.model.Users;
+import com.luntan.demo.model.UsersExample;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,13 +85,11 @@ public class QuestionService {
     }
 //查询文章
     public QuestionDTO getById(Integer id) {
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria().andIdEqualTo(id);
-       List<Question> question = questionMapper.selectByExample(questionExample);
+       Question question = questionMapper.selectByPrimaryKey(id);
        QuestionDTO  questionDTO=new QuestionDTO();
-       BeanUtils.copyProperties(question,questionDTO);
-       Users users = usersMapper.selectByPrimaryKey(question.get(0).getCreator());
-       questionDTO.setUser(users);
+        BeanUtils.copyProperties(question,questionDTO);//复制属性
+         Users users = usersMapper.selectByPrimaryKey(question.getCreator());
+         questionDTO.setUser(users);
        return  questionDTO;
     }
 
@@ -98,7 +97,7 @@ public class QuestionService {
         if (question.getId()==null){
             questionMapper.insertSelective(question);
         }else {
-            questionMapper.updateByPrimaryKey(question);
+            questionMapper.updateByPrimaryKeySelective(question);
         }
     }
 }

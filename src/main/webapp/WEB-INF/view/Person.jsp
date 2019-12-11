@@ -72,7 +72,7 @@
             <c:if test="${section.equals('questions')}">
                 <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
                 <c:forEach items="${mypage.questionDTOS}"  var="myquestion">
-                    <jsp:setProperty name="dateValue" property="time" value="${myquestion.gmtcreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
+                    <jsp:setProperty name="dateValue" property="time" value="${myquestion.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
                     <div class="media"  style="margin: 50px">
                         <div class="media-left " >
                             <a href="#">
@@ -80,11 +80,11 @@
                             </a>
                         </div>
                         <div class="media-body"  >
-                            <h4 class="media-heading"> <c:out value="${myquestion.title}"/></h4>
+                            <h4 class="media-heading"> <a href="/question/${myquestion.id}"><c:out value="${myquestion.title}"/></a></h4>
                             <span><c:out value="${myquestion.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
                             <span class="test"><span ><c:out value="${myquestion.commentCount}"/></span>个回复
-                                <span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/></span> </span>
+                                <span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></span> </span>
                         </div>
                     </div>
                 </c:forEach>
@@ -105,7 +105,7 @@
                             </li>
                         </c:if>
                         <c:forEach items="${mypage.page_number}" var="page">
-                            <c:if test="${mypage.now_page==page}">
+                            <c:if test="${mypage.now_page==page}">k
                                 <li class="active">
                                     <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
                             </c:if>

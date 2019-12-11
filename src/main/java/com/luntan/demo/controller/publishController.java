@@ -4,6 +4,7 @@ import com.luntan.demo.Service.QuestionService;
 import com.luntan.demo.mappers.QuestionMapper;
 import com.luntan.demo.mappers.UserMapper;
 import com.luntan.demo.model.Question;
+import com.luntan.demo.model.QuestionExample;
 import com.luntan.demo.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class publishController {
@@ -29,7 +31,10 @@ public class publishController {
     UserMapper userMapper;
     @GetMapping("/publish/{id}")
     public  String edit(@PathVariable(name = "id") Integer id,Model model){
-       Question question =  questionMapper.getById(id);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdEqualTo(id);
+        List<Question> questions =  questionMapper.selectByExample(questionExample);
+        Question question = questions.get(0);
         model.addAttribute("title",question.getTitle());
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
@@ -77,8 +82,8 @@ public class publishController {
         question.setTitle(title);
         question.setCreator(user1.getId());
         question.setId(id);
-        question.setGmtcreate(System.currentTimeMillis());
-        question.setGmtmodified(question.getGmtcreate());
+        question.setGmtCreate(System.currentTimeMillis());
+        question.setGmtModified(question.getGmtCreate());
         questionService.CreateUpdate(question);
         return "redirect:/";
     }

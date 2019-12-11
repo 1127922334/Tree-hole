@@ -2,8 +2,9 @@ package com.luntan.demo.controller;
 
 import com.luntan.demo.dto.AcessTokenDTO;
 import com.luntan.demo.dto.GithubUser;
-import com.luntan.demo.mappers.UserMapper;
+import com.luntan.demo.mappers.UsersMapper;
 import com.luntan.demo.model.Users;
+import com.luntan.demo.model.UsersExample;
 import com.luntan.demo.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Response;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -27,7 +28,7 @@ public class AuthorizeController {
     private String Redirecturi;
 
     @Autowired
-    private UserMapper userMapper;
+    private UsersMapper usersMapper;
 
     @Autowired
     private GithubProvider githubProvider;
@@ -44,18 +45,20 @@ public class AuthorizeController {
         GithubUser user =  githubProvider.getUser(AcessToken);//获取User数据
         if(user!=null){
             //登录成功
-           Users users1 = userMapper.findByAccount_id(String.valueOf(user.getId()));
-            if(users1==null){
+            UsersExample usersExample = new UsersExample();
+            usersExample.createCriteria().andAccountIdEqualTo(String.valueOf(user.getId()));
+            List<Users> users1 = usersMapper.selectByExample(usersExample);
+            if(users1.size()==0){
                 Users users  = new Users();
                 String token =UUID.randomUUID().toString();
                 users.setToken(token);
                 users.setName(user.getName());
-                users.setAccount_Id(String.valueOf(user.getId()));//将int类型强转为String
+                users.setAccountId(String.valueOf(user.getId()));//将int类型强转为String
                 users.setAvatarUrl(user.getAvatar_url());
                 users.setGmtCreate(System.currentTimeMillis());
                 users.setGmtModified(users.getGmtCreate());
                 users.setBio(user.getBio());
-                userMapper.insert(users);
+                usersMapper.insert(users);
                 Cookie cookie =new Cookie("token",token);
                 cookie.setPath("/");
                 int time = 60*60*24;//给Cookie设置过期时间,防止浏览器关闭Cookie被删除
@@ -67,12 +70,13 @@ public class AuthorizeController {
                 String token =UUID.randomUUID().toString();
                 user_s.setToken(token);
                 user_s.setName(user.getName());
-                user_s.setAccount_Id(String.valueOf(user.getId()));//将int类型强转为String
+                user_s.setAccountId(String.valueOf(user.getId()));//将int类型强转为String
                 user_s.setAvatarUrl(user.getAvatar_url());
-                user_s.setGmtCreate(System.currentTimeMillis());
-                user_s.setGmtModified(users1.getGmtCreate());
+                user_s.setGmtModified(System.currentTimeMillis());
                 user_s.setBio(user.getBio());
-                userMapper.update_s(user_s);
+                UsersExample usersExample1 = new UsersExample();
+                usersExample1.createCriteria().andAccountIdEqualTo(user_s.getAccountId());
+                    usersMapper.updateByExampleSelective(user_s,usersExample1);
                 Cookie cookie =new Cookie("token",user_s.getToken());
                 cookie.setPath("/");
                 int time = 60*60*24;

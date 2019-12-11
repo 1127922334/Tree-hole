@@ -2,11 +2,8 @@ package com.luntan.demo.controller;
 
 import com.luntan.demo.Service.QuestionService;
 import com.luntan.demo.dto.PagesDTO;
-import com.luntan.demo.mappers.QuestionMapper;
-import com.luntan.demo.mappers.UserMapper;
 import com.luntan.demo.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MyquestionController {
-    @Autowired
-    UserMapper userMapper;
     @Autowired
     QuestionService questionService;
 

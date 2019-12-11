@@ -2,12 +2,15 @@ package com.luntan.demo.Service;
 
 import com.luntan.demo.dto.PagesDTO;
 import com.luntan.demo.dto.QuestionDTO;
+import com.luntan.demo.exception.DIYError;
+import com.luntan.demo.exception.enum_ErrorCode;
 import com.luntan.demo.mappers.QuestionMapper;
 import com.luntan.demo.mappers.UsersMapper;
 import com.luntan.demo.model.Question;
 import com.luntan.demo.model.QuestionExample;
 import com.luntan.demo.model.Users;
 import com.luntan.demo.model.UsersExample;
+import okhttp3.internal.http2.ErrorCode;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +89,9 @@ public class QuestionService {
 //查询文章
     public QuestionDTO getById(Integer id) {
        Question question = questionMapper.selectByPrimaryKey(id);
+       if (question == null){
+           throw new DIYError(enum_ErrorCode.QUESTION_NOT_FOUND);
+       }
        QuestionDTO  questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);//复制属性
          Users users = usersMapper.selectByPrimaryKey(question.getCreator());
@@ -97,7 +103,10 @@ public class QuestionService {
         if (question.getId()==null){
             questionMapper.insertSelective(question);
         }else {
-            questionMapper.updateByPrimaryKeySelective(question);
+            int update = questionMapper.updateByPrimaryKeySelective(question);
+            if(update != question.getId()){
+                    throw new DIYError(enum_ErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }

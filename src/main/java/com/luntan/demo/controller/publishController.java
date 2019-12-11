@@ -2,9 +2,7 @@ package com.luntan.demo.controller;
 
 import com.luntan.demo.Service.QuestionService;
 import com.luntan.demo.mappers.QuestionMapper;
-import com.luntan.demo.mappers.UserMapper;
 import com.luntan.demo.model.Question;
-import com.luntan.demo.model.QuestionExample;
 import com.luntan.demo.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class publishController {
@@ -27,8 +23,6 @@ public class publishController {
     @Autowired
     QuestionService questionService;
 
-    @Autowired
-    UserMapper userMapper;
     @GetMapping("/publish/{id}")
     public  String edit(@PathVariable(name = "id") Integer id,Model model){
 

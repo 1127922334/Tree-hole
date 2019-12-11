@@ -110,7 +110,7 @@
                                     <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
                             </c:if>
 
-                            <c:if test="${mypage.now_page!=page}">
+                            <c:if test="${mypage.now_page!=page}">n
                                 <li >
                                     <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
                             </c:if>

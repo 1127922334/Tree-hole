@@ -51,7 +51,7 @@
                 <c:if test="${user !=null}">
                     <li role="presentation" class="dropdown" >
                         <a href="#"  class=" dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <img style="wid 30px;height: 30px;border-radius:5px 5px 5px 5px" src=<%= user.getAvatarUrl()%> alt=<%=user.getName()%> />
+                            <img style="width 30px;height: 30px;border-radius:5px 5px 5px 5px" src=<%= user.getAvatarUrl()%> alt=<%=user.getName()%> />
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>

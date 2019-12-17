@@ -16,6 +16,7 @@
     <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <link rel="stylesheet" href="/css/community.css">
+    <script type="application/javascript" src="/js/community.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -68,6 +69,7 @@
 <div class="container-fluid main person" >
     <div class="row" style="margin:19px">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
             <jsp:setProperty name="dateValue" property="time" value="${question.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
             <h2> <c:out value="${question.title}"/></h2>
@@ -82,9 +84,60 @@
                 <c:out value="${question.description}"/>
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" />
-            <c:if test="${sessionScope.user.id == question.creator && sessionScope.user!=null}"> <a href="/publish/${question.id}" class="col-lg-9 col-md-12 col-sm-12 col-xs-12 community-menu">
+            <c:if test="${sessionScope.user.id == question.creator && sessionScope.user!=null}">
+                <a href="/publish/${question.id}" class="col-lg-9 col-md-12 col-sm-12 col-xs-12 community-menu">
                 <span class="glyphicon glyphicon-pencil " aria-hidden="true">编辑</span>
-            </a></c:if>
+            </a>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" />
+            </c:if>
+            <%--          回复列表--%>
+            <h3>&nbsp;&nbsp;&nbsp;<c:out value="${question.commentCount}"></c:out>个回复</h3>
+            <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 0"/>
+            <div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                <jsp:useBean id="dateValue1" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
+                <c:forEach items="${comments}" var="comment">
+                    <jsp:setProperty name="dateValue1" property="time" value="${comment.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
+                    <div class="media"  style="margin: 5px">
+                        <div class="media-left" >
+                            <a href="#">
+                                <img class="media-object img-rounded" src="${comment.user.avatarUrl}" title="${comment.user.name}">
+                            </a>
+                        </div>
+                        <div class="media-body"  >
+                            <h5 style="margin: 0">
+                                <span><c:out value="${comment.user.name}"/></span></h5>
+                            <span><c:out value="${comment.comment}"/></span>
+                            <div class="menu"> <span class="glyphicon glyphicon-thumbs-up icon"></span><c:out value="${comment.likeCount}"/>
+                                <span class="glyphicon glyphicon-comment icon"></span>
+                                <span class="pull-right" style="font-size: 14px"> 发布时间:&nbsp;&nbsp;&nbsp;<fmt:formatDate value="${dateValue1}" pattern="yyyy-MM-dd"/></span>
+                            </div>
+                        </div>
+                        <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px"/>
+                    </div>
+                </c:forEach>
+
+            </div>
+            <div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                <h4>新回复</h4>
+                <div class="media"  style="margin: 5px">
+                    <div class="media-left" >
+                        <a href="#">
+                            <img class="media-object img-rounded" style="margin-bottom: 5px" src="${question.user.avatarUrl}" title="${question.user.name}">
+                        </a>
+                    </div>
+                    <div class="media-body"  >
+                        <h4 >
+                            <span><c:out value="${question.user.name}"/></span></h4>
+                    </div>
+                </div>
+
+                <input type="hidden" id="question_id" value="${question.id}">
+                <textarea class="form-control" rows="6" id="comment"></textarea>
+                <br/>
+                <button type="submit" class="btn btn-success my-publish" onclick="post()">回复</button>
+            </div>
+        </div>
+
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">

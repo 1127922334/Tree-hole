@@ -84,6 +84,7 @@
                             <span><c:out value="${myquestion.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
                             <span class="test"><span ><c:out value="${myquestion.commentCount}"/></span>个回复
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${myquestion.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></span> </span>
                         </div>
                     </div>
@@ -105,12 +106,12 @@
                             </li>
                         </c:if>
                         <c:forEach items="${mypage.page_number}" var="page">
-                            <c:if test="${mypage.now_page==page}">k
+                            <c:if test="${mypage.now_page==page}">
                                 <li class="active">
                                     <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
                             </c:if>
 
-                            <c:if test="${mypage.now_page!=page}">n
+                            <c:if test="${mypage.now_page!=page}">
                                 <li >
                                     <a  href="?page=${page}" ><c:out value="${page}"/></a></li>
                             </c:if>

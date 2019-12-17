@@ -16,6 +16,16 @@
     <script src="js/jquery-3.4.1.min.js" type="application/javascript"></script>
     <script src="js/bootstrap.js" type="application/javascript"></script>
     <link rel="stylesheet" href="css/community.css">
+    <script type="application/javascript">
+        window.onload = function () {
+            var closeable = window.localStorage.getItem("closeable");
+            console.log(closeable);
+            if (closeable=="true") {
+                window.close();
+                window.localStorage.removeItem("closeable");
+            }
+        }
+    </script>
 </head>
 <body>
 <div>
@@ -83,7 +93,9 @@
                     </div>
                     <div class="media-body"  >
                         <h4 class="media-heading">
-                            <a href="/question/${question.id}"><c:out value="${question.title}"/></a></h4>
+                            <a href="/question/${question.id}">
+                                <c:out value="${question.title}"/>
+                            </a></h4>
                         <span><c:out value="${question.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
                         <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复<span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${question.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span> 发布时间<span>
                 <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd "/></span> </span>

@@ -9,6 +9,22 @@ body{
     float: right;
   margin-bottom: 15px;
 }
+
+.wenben{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box; /* autoprefixer: off */
+    -webkit-box-orient:vertical; /* autoprefixer: on */
+    -webkit-line-clamp:2;
+}
+.hot{
+    width: 250px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box; /* autoprefixer: off */
+    -webkit-box-orient:vertical; /* autoprefixer: on */
+    -webkit-line-clamp:2;
+}
 .media-object{
     width: 45px;
     height: 45px;
@@ -36,4 +52,14 @@ body{
 }
 .menu .icon:hover{
     color: #499ef3;
+}
+.menu .active{
+    color: #499ef3;
+}
+.sub-comment{
+    border: 4px solid #eee;
+    border-radius: 10px;
+    border-top: 10px;
+    padding-top: 15px;
+    margin-bottom: 15px;
 }

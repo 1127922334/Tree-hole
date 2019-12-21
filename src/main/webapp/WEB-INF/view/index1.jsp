@@ -52,7 +52,7 @@
 
                 <ul class="nav nav-tabs navbar-right">
                     <li ><a href="/publish">提问</a></li>
-
+                    <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                        <%
                         Users user = (Users) request.getSession().getAttribute("user");
                        %>
@@ -64,6 +64,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
+                            <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
@@ -85,24 +86,34 @@
                 <jsp:useBean id="dateValue" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->
                 <c:forEach items="${questions.questionDTOS}"  var="question">
                     <jsp:setProperty name="dateValue" property="time" value="${question.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->
-                <div class="media"  style="margin: 50px">
+                <div class="media"  style="margin: 40px">
                     <div class="media-left " >
                         <a href="#">
                             <img class="media-object img-rounded" src="${question.user.avatarUrl}" title="${question.user.name}">
                         </a>
                     </div>
-                    <div class="media-body"  >
+                    <div class="media-body" style="height: 90px"  >
                         <h4 class="media-heading">
                             <a href="/question/${question.id}">
                                 <c:out value="${question.title}"/>
                             </a></h4>
-                        <span><c:out value="${question.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
-                        <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复<span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${question.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span> 发布时间<span>
-                <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd "/></span> </span>
+                        <span class="wenben" ><c:out value="${question.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                        <span class="test"><span ><c:out value="${question.commentCount}"/></span>个回复
+
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${question.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                            </span>
+                            <span class="">
+                            发布时间 <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd "/></span>
+                            <span></span>
+                             <c:forEach items="${question.tag.split(',')}" var="tag">
+                                 <span class="label label-info pull-right" style="margin: 2px"> <span class="glyphicon glyphicon-tags">&nbsp;</span>${tag}</span>
+                                 </c:forEach>
+                        </span>
                     </div>
+                    <hr>
                 </div>
                 </c:forEach>
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation " class="pull-right">
                     <ul class="pagination pagination-lg">
                         <c:if test="${questions.firstPage}">
                         <li >
@@ -149,6 +160,25 @@
             </div>
             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                 <h3> 热门话题</h3>
+<hr>
+                <c:forEach items="${hots}" var="hot">
+                    <div class="media"  style="margin: 50px">
+                        <div class="media-left " >
+                            <a href="#">
+                                <img class="media-object img-rounded" src="${hot.user.avatarUrl}" title="${hot.user.name}">
+                            </a>
+                        </div>
+                        <div class="media-body"  >
+                            <h4 class="media-heading">
+                                <a href="/question/${hot.id}">
+                                    <c:out value="${hot.title}"/>
+                                </a></h4>
+                            <span class="hot"><c:out value="${hot.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                            <span class="test"><span ><c:out value="${hot.commentCount}"/></span>个回复<span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${hot.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </div>
+                        <hr/>
+                    </div>
+                </c:forEach>
             </div>
             <h3></h3>
         </div>

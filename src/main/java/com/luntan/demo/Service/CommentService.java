@@ -3,14 +3,9 @@ package com.luntan.demo.Service;
 import com.luntan.demo.dto.CommentDTO;
 import com.luntan.demo.enums.CommentTypeEnums;
 import com.luntan.demo.exception.DIYError;
-import com.luntan.demo.exception.ErrorCode;
 import com.luntan.demo.exception.enum_ErrorCode;
-import com.luntan.demo.mappers.CommentMapper;
-import com.luntan.demo.mappers.QuestionMapper;
-import com.luntan.demo.mappers.QuestionMapperPlus;
-import com.luntan.demo.mappers.UsersMapper;
+import com.luntan.demo.mappers.*;
 import com.luntan.demo.model.*;
-import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +27,13 @@ public class CommentService {
     QuestionMapperPlus questionMapperPlus;
     @Autowired
     UsersMapper usersMapper;
+    @Autowired
+    CommetMapperPlus commetMapperPlus;
     //实现事务回滚
     @Transactional
     public void insert(Comment comment) {
-        if (comment.getParentId()==null|| comment.getParentId()==0){
+
+        if (comment.getParentId()== null|| comment.getParentId()==0){
             throw  new DIYError(enum_ErrorCode.COMMENT_NOT_FOUND);
         }
         if (comment.getType()==null|| !CommentTypeEnums.isExist(comment.getType())){
@@ -43,11 +41,18 @@ public class CommentService {
         }
         if (comment.getType() == CommentTypeEnums.COMMENT.getType()){
             //回复评论
-          Comment comment1 =  commentMapper.selectByPrimaryKey(comment.getId());
+          Comment comment1 =  commentMapper.selectByPrimaryKey(comment.getParentId());
           if (comment1==null){
               throw new DIYError(enum_ErrorCode.COMMENT_NOT_FOUND);
           }
-          commentMapper.insert(comment);
+            //增加评论数
+            Comment comment2 = new Comment();
+            comment2.setId(comment.getParentId());
+            comment2.setCommentCount(1);
+            commentMapper.insertSelective(comment);
+          commetMapperPlus.incCommentCount(comment2);
+
+
         }else {
             //回复问题
            Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -60,10 +65,15 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listByQuestionId(Long id) {
+    public List<CommentDTO> listBytargetId(Long id, CommentTypeEnums type) {
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnums.QUESTION.getType());
-        commentExample.setOrderByClause("gmt_create desc");
+        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(type.getType());
+        if (type.getType()==1){
+            commentExample.setOrderByClause("gmt_create desc");
+        }else {
+            commentExample.setOrderByClause("gmt_create asc");
+        }
+
         List<Comment> comments= commentMapper.selectByExample(commentExample);
         if(comments.size()==0){
             return new ArrayList<>();

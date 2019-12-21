@@ -2,10 +2,9 @@ package com.luntan.demo.controller;
 
 import com.luntan.demo.Service.CommentService;
 import com.luntan.demo.Service.QuestionService;
-import com.luntan.demo.dto.CommentCreateDTO;
 import com.luntan.demo.dto.CommentDTO;
 import com.luntan.demo.dto.QuestionDTO;
-import com.luntan.demo.mappers.CommentMapper;
+import com.luntan.demo.enums.CommentTypeEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,9 +22,13 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public  String question (@PathVariable(name="id") Long id , Model model){
        QuestionDTO questionDTO = questionService.getById(id);
-       List<CommentDTO> comments = commentService.listByQuestionId(id);
+       //相关问题
+       List<QuestionDTO> relatedDTOList = questionService.selectRelated(questionDTO);
+       //查询评论
+       List<CommentDTO> comments = commentService.listBytargetId(id, CommentTypeEnums.QUESTION);
        //累加阅读数
        questionService.incView(id);
+       model.addAttribute("tags",relatedDTOList);
        model.addAttribute("question",questionDTO);
        model.addAttribute("comments",comments);
         return "question";

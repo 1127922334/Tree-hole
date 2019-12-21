@@ -1,5 +1,6 @@
 package com.luntan.demo.Service;
 
+import com.github.pagehelper.util.StringUtil;
 import com.luntan.demo.dto.PagesDTO;
 import com.luntan.demo.dto.QuestionDTO;
 import com.luntan.demo.exception.DIYError;
@@ -10,13 +11,17 @@ import com.luntan.demo.mappers.UsersMapper;
 import com.luntan.demo.model.Question;
 import com.luntan.demo.model.QuestionExample;
 import com.luntan.demo.model.Users;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -117,5 +122,28 @@ public class QuestionService {
         question.setId(id);
         question.setViewCount(1);
         questionMapperPlus.incView(question);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO questionDTO) {
+        if (questionDTO.getTag()==null){
+            return  new ArrayList<>();
+        }
+        //拆分字符串
+        String[] tags = StringUtils.split(questionDTO.getTag(),",");
+        //拼接字符串
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question =new Question();
+        question.setId(questionDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questionList = questionMapperPlus.selectRelated(question);
+        //转换成List<QuestionDTO>
+        List<QuestionDTO>questionDTOList = questionList.stream().map(q -> {
+           QuestionDTO questionDTO1 = new QuestionDTO();
+           BeanUtils.copyProperties(q,questionDTO1);
+           Users users = usersMapper.selectByPrimaryKey(q.getCreator());
+           questionDTO1.setUser(users);
+           return questionDTO1;
+        }).collect(Collectors.toList());
+        return questionDTOList;
     }
 }

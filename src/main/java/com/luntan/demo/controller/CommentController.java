@@ -2,7 +2,9 @@ package com.luntan.demo.controller;
 
 import com.luntan.demo.Service.CommentService;
 import com.luntan.demo.dto.CommentCreateDTO;
+import com.luntan.demo.dto.CommentDTO;
 import com.luntan.demo.dto.ResultDTO;
+import com.luntan.demo.enums.CommentTypeEnums;
 import com.luntan.demo.exception.DIYError;
 import com.luntan.demo.exception.enum_ErrorCode;
 import com.luntan.demo.mappers.CommentMapper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -39,7 +42,15 @@ public class CommentController {
         comment.setGmtModified(comment.getGmtCreate());
         comment.setCommentator(users.getId());
         comment.setLikeCount(0);
+        comment.setCommentCount(0);
         commentService.insert(comment);
-        return ResultDTO.okOf();
+
+        return ResultDTO.okOf(null);
+    }
+    @ResponseBody
+    @RequestMapping("/comment/{id}")
+    public  ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id){
+       List<CommentDTO>  commentDTOList = commentService.listBytargetId(id,CommentTypeEnums.COMMENT);
+        return ResultDTO.okOf(commentDTOList);
     }
 }

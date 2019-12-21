@@ -15,7 +15,6 @@ public enum enum_ErrorCode implements ErrorCode {
         this.code = code;
         this.message = message;
     }
-
     @Override
     public String getMessage() {
         return message;

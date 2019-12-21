@@ -17,6 +17,7 @@
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <link rel="stylesheet" href="/css/community.css">
     <script type="application/javascript" src="/js/community.js"></script>
+    <script type="application/javascript" src="/js/comment.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -42,7 +43,7 @@
 
             <ul class="nav nav-tabs navbar-right">
                 <li ><a href="/publish">提问</a></li>
-
+                <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                 <%
                     Users user = (Users) request.getSession().getAttribute("user");
                 %>
@@ -54,6 +55,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
+                            <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
@@ -84,13 +86,17 @@
                 <c:out value="${question.description}"/>
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" />
+            <c:forEach items="${question.tag.split(',')}" var="tag">
+                <span class="label label-info"> <span class="glyphicon glyphicon-tags">&nbsp;</span>${tag}</span>
+            </c:forEach>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" />
             <c:if test="${sessionScope.user.id == question.creator && sessionScope.user!=null}">
                 <a href="/publish/${question.id}" class="col-lg-9 col-md-12 col-sm-12 col-xs-12 community-menu">
                 <span class="glyphicon glyphicon-pencil " aria-hidden="true">编辑</span>
             </a>
-                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" />
             </c:if>
-            <%--          回复列表--%>
+            <br> <br> <br> <br> <br> <br>
+        <%--          回复列表--%>
             <h3>&nbsp;&nbsp;&nbsp;<c:out value="${question.commentCount}"></c:out>个回复</h3>
             <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 0"/>
             <div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
@@ -108,11 +114,39 @@
                                 <span><c:out value="${comment.user.name}"/></span></h5>
                             <span><c:out value="${comment.comment}"/></span>
                             <div class="menu"> <span class="glyphicon glyphicon-thumbs-up icon"></span><c:out value="${comment.likeCount}"/>
-                                <span class="glyphicon glyphicon-comment icon"></span>
+                                <span class="glyphicon glyphicon-comment icon"   data-id="${comment.id}"  onclick="collapseComment(this)"></span><c:out value="${comment.commentCount}"/>
                                 <span class="pull-right" style="font-size: 14px"> 发布时间:&nbsp;&nbsp;&nbsp;<fmt:formatDate value="${dateValue1}" pattern="yyyy-MM-dd"/></span>
                             </div>
+                            <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 8px"/>
+<%--                            二级评论--%>
+                            <div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12 sub-comment collapse" id="comment-${comment.id}" >
+
+<%--                                    <jsp:useBean id="dateValue2" class="java.util.Date"/> <!-- 通过jsp:userBean标签引入java.util.Date日期类 -->--%>
+<%--                                    <c:forEach items="${comments}" var="comment1">--%>
+<%--                                        <jsp:setProperty name="dateValue2" property="time" value="${comment.gmtCreate}"/> <!-- 使用jsp:setProperty标签将时间戳设置到Date的time属性中 -->--%>
+<%--                                        <div class="media"  style="margin: 5px">--%>
+<%--                                            <div class="media-left" >--%>
+<%--                                                <a href="#">--%>
+<%--                                                    <img class="media-object img-rounded" src="${comment.user.avatarUrl}" title="${comment.user.name}">--%>
+<%--                                                </a>--%>
+<%--                                            </div>--%>
+<%--                                            <div class="media-body"  >--%>
+<%--                                                <h5 style="margin: 0">--%>
+<%--                                                    <span><c:out value="${comment.user.name}"/></span></h5>--%>
+<%--                                                <span><c:out value="${comment.comment}"/></span>--%>
+<%--                                                <div class="menu"> <span class="glyphicon glyphicon-thumbs-up icon"></span><c:out value="${comment.likeCount}"/>--%>
+<%--                                                    <span class="glyphicon glyphicon-comment icon"  data-id="${comment.id}" onclick="collapseComment(this)"></span>--%>
+<%--                                                    <span class="pull-right" style="font-size: 14px"> 发布时间:&nbsp;&nbsp;&nbsp;<fmt:formatDate value="${dateValue2}" pattern="yyyy-MM-dd"/></span>--%>
+<%--                                                </div>--%>
+<%--                                            </div>--%>
+<%--                                            <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px"/>--%>
+<%--                                        </div>--%>
+<%--                                    </c:forEach>--%>
+                                    <input type="text" class="form-control" placeholder="请输入回复" id="input-${comment.id}" />
+                                    <button type="button" class="btn btn-success my-publish" style="margin-top: 10px;" onclick="comment2(this)" data-id2="${comment.id}" >评论</button>
+                                </div>
                         </div>
-                        <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px"/>
+
                     </div>
                 </c:forEach>
 
@@ -159,6 +193,27 @@
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
+
+
+                    <c:forEach items="${tags}" var="tag">
+                        <div class="media"  style="margin: 50px">
+                            <div class="media-left " >
+                                <a href="#">
+                                    <img class="media-object img-rounded" src="${tag.user.avatarUrl}" title="${tag.user.name}">
+                                </a>
+                            </div>
+                            <div class="media-body"  >
+                                <h4 class="media-heading">
+                                    <a href="/question/${tag.id}">
+                                        <c:out value="${tag.title}"/>
+                                    </a></h4>
+                                <span class="wenben"><c:out value="${tag.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
+                                <span class="test"><span ><c:out value="${tag.commentCount}"/></span>个回复<span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${tag.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span><span>
+                            </div>
+                        </div>
+                    </c:forEach>
+
+
             </div>
         </div>
     </div>

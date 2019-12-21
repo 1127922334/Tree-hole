@@ -9,7 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //实现拦截器
 @Configuration
 //@EnableWebMvc
-public class WebConfig implements WebMvcConfigurer {
+public class
+WebConfig implements WebMvcConfigurer {
     @Autowired
     SessionInterceptors sessionInterceptors;
     @Override

@@ -40,7 +40,7 @@
 
             <ul class="nav nav-tabs navbar-right">
                 <li ><a href="/publish">提问</a></li>
-
+                <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                 <%
                     Users user = (Users) request.getSession().getAttribute("user");
                 %>
@@ -52,6 +52,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
+                            <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
@@ -81,11 +82,16 @@
                         </div>
                         <div class="media-body"  >
                             <h4 class="media-heading"> <a href="/question/${myquestion.id}"><c:out value="${myquestion.title}"/></a></h4>
-                            <span><c:out value="${myquestion.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span class="wenben"><c:out value="${myquestion.description}"/></span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><br>
                             <span class="test"><span ><c:out value="${myquestion.commentCount}"/></span>个回复
                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;浏览数:<c:out value="${myquestion.viewCount}"/>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></span> </span>
+                                <span><fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/publish/${myquestion.id}" class="community-menu">
+                                <span class="glyphicon glyphicon-pencil " aria-hidden="true">快速编辑</span>
+                                </a>
+                                </span></span>
                         </div>
                     </div>
                 </c:forEach>

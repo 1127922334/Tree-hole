@@ -18,6 +18,7 @@
     <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/community.js" type="application/javascript"></script>
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -43,7 +44,7 @@
 
             <ul class="nav nav-tabs navbar-right">
                 <li ><a href="/publish">提问</a></li>
-
+                <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                 <%
                     Users user = (Users) request.getSession().getAttribute("user");
                 %>
@@ -55,6 +56,7 @@
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/Myquestions">我的问题</a></li>
+                            <li><a href="/profile/repies">通知<span class="badge pull-right">14</span></a></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
@@ -88,7 +90,43 @@
                 <div class="form-group">
                     <label for="title">添加标签</label>
                     <br><br>
-                    <input type="text" class="form-control" id="tag" name="tag" value="${tag}" placeholder="输入标签 以,号隔开">
+                    <input type="text" class="form-control" id="tag" name="tag" value="${tag}" placeholder="输入标签 以,号隔开" onclick="show_tag()">
+                    <br>
+                    <div id="select-tag" style="display: none;">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <c:forEach items="${All_Tag}" var="tag">
+                            <c:if test="${tag.catrgoryName=='开发语言'}">
+                                <li role="presentation" class="active"  ><a href="#${tag.catrgoryName}"  aria-controls="home" role="tab" data-toggle="tab"><c:out value="${tag.catrgoryName}"></c:out></a></li>
+                            </c:if>
+                            <c:if test="${tag.catrgoryName!='开发语言'}">
+                                <li role="presentation" ><a href="#${tag.catrgoryName}"  aria-controls="home" role="tab" data-toggle="tab"><c:out value="${tag.catrgoryName}"></c:out></a></li>
+                            </c:if>
+                        </c:forEach>
+
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <c:forEach items="${All_Tag}" var="tag">
+                            <c:if test="${tag.catrgoryName=='开发语言'}">
+                                <div role="tabpanel" class="tab-pane active " style="padding: 5px;" id="${tag.catrgoryName}">
+                                    <c:forEach items="${tag.tags}" var="eachone">
+                                        <span  class="label label-info" style="margin: 3px;padding: 5px"> <span class="glyphicon glyphicon-tags"style="margin: 10px" onclick="settag('${eachone}')">&nbsp;<c:out value="${eachone}"/></span></span>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
+                            <c:if test="${tag.catrgoryName!='开发语言'}">
+                                <div role="tabpanel" class="tab-pane" style="padding: 5px;" id="${tag.catrgoryName}">
+                                    <c:forEach items="${tag.tags}" var="eachone">
+                                        <span  class="label label-info" style="margin: 3px;padding: 5px"> <span class="glyphicon glyphicon-tags"style="margin: 10px" onclick="settag('${eachone}')">&nbsp;<c:out value="${eachone}"/></span></span>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
+
+                        </c:forEach>
+                    </div>
+
+                </div>
                 </div>
                 <div class="container-fluid main">
                     <div class="row">
